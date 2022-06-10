@@ -1,0 +1,96 @@
+*
+  margin: 0
+  padding: 0
+  box-sizing: border-box
+
+:root
+  font-size: 62.5%
+  --paragraph: #8A8A8A
+  --description: #ACACAC
+  --light-green: #945ab8
+  --light-purple: #b862cf
+
+html
+  scroll-behavior: smooth
+
+
+body
+  font-family: 'Poppins', sans-serif
+  background: #17162E
+  color: #fff
+  font-size: 1.2rem
+
+h1.pokedex
+  margin: 5rem 3rem
+  font-size: 4.4rem
+  text-transform: capitalize
+
+p.power
+        width: fit-content
+        padding: .5rem 1.6rem
+        border-radius: 5rem
+        background-color: var(--light-green)
+        filter: brightness(1.1)
+        margin-top: 0.8rem
+
+        &:last-child
+          margin-top: 0.8rem
+
+section.pokemons
+
+  display: flex
+  flex-wrap: wrap
+  margin-top: 5rem
+
+  .card-pokemon
+    width: 30rem
+    height: 20rem
+
+    padding: 2rem
+    margin: 2rem
+
+    border-radius: 3rem
+    background-color: var(--light-green)
+
+    display: flex
+    justify-content: space-between
+    position: relative
+    cursor: pointer
+
+    background-image: url(../assets/pokebola.png)
+    background-repeat: no-repeat
+    background-blend-mode: soft-light
+    background-size: contain
+    background-position: 130%
+    transition: transform .5s ease
+
+    .items
+      h3
+        font-size: 2rem
+        margin-bottom: 1.5rem
+        text-transform: capitalize
+
+    img
+      width: fit-content
+      height: 100%
+      padding: 1rem
+      transition: transform .5s ease-in-out
+      z-index: 2
+
+  .card-pokemon:hover
+    transform: scale(1.1)
+
+  .card-pokemon:hover img
+    transform: scale(1.1)
+
+.overlay
+  display: absolute
+  height: 100%
+  width: 100%
+  background: gray
+  z-index: 100
+.modal
+  width: 70rem
+  height: 50rem
+  background-color: red
+  margin: 0 auto
