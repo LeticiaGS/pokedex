@@ -1,38 +1,14 @@
 const pokemonsSection = document.querySelector('.pokemons')
 
-const pokemons = [
-  {
-    id: 1,
-    name: 'bulbasaur',
-    firstPower: 'Grass',
-    secondpower: 'Poison',
-    image_path: '../assets/bulbasaur.png',
-    backgroundColor: '#5AB85F'
-  },
-  {
-    id: 2,
-    name: 'pikachu',
-    firstPower: 'Raio',
-    secondpower: 'Ashe',
-    image_path: '../assets/pikachu.png',
-    backgroundColor: '#FFD76F'
-  },
-  {
-    id: 3,
-    name: 'charmander',
-    firstPower: 'Poder',
-    secondpower: 'Outro poder',
-    image_path: '../assets/charmander.png',
-    backgroundColor: '#FC6C6D'
-  },
-  {
-    id: 4,
-    name: 'squirtle',
-    firstPower: 'Fast',
-    secondpower: 'Cute',
-    image_path: '../assets/squitle.png',
-    backgroundColor: '#70b6fa'
-  }
+const changePokemonsColors = [
+  { originalColor: 'yellow', substituteColor: '#F1B81A' },
+  { originalColor: 'blue', substituteColor: '#5C92CB' },
+  { originalColor: 'white', substituteColor: '#D0B9B3' },
+  { originalColor: 'black', substituteColor: '#202020' },
+  { originalColor: 'green', substituteColor: '#5D9242' },
+  { originalColor: 'red', substituteColor: 'brown' },
+  { originalColor: 'brown', substituteColor: '#684E36' },
+  { originalColor: 'purple', substituteColor: '#674D7D' }
 ]
 
 async function fetchPokemons() {
@@ -73,8 +49,12 @@ async function renderPokemons(pokemon) {
       return response.json()
     })
     .then(data => {
-      console.log(data.color.name)
       backgroundColor = data.color.name
+      for (let i = 0; i < changePokemonsColors.length; i++) {
+        if (data.color.name.includes(changePokemonsColors[i].originalColor)) {
+          backgroundColor = changePokemonsColors[i].substituteColor
+        }
+      }
     })
 
   firstPower = types[0].type.name

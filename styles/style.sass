@@ -13,34 +13,34 @@
 html
   scroll-behavior: smooth
 
-
 body
   font-family: 'Poppins', sans-serif
-  background: #17162E
+  background: #0c010e
   color: #fff
   font-size: 1.2rem
 
 h1.pokedex
-  margin: 5rem 3rem
-  font-size: 4.4rem
+  margin: 5rem 10rem
+  padding-left: 2rem
+  font-size: 7rem
   text-transform: capitalize
 
 p.power
-        width: fit-content
-        padding: .5rem 1.6rem
-        border-radius: 5rem
-        background-color: var(--light-green)
-        filter: brightness(1.1)
-        margin-top: 0.8rem
+  width: fit-content
+  padding: .5rem 1.6rem
+  border-radius: 5rem
+  background-color: var(--light-green)
+  filter: brightness(1.1)
+  margin-top: 0.8rem
 
-        &:last-child
-          margin-top: 0.8rem
+  &:last-child
+    margin-top: 0.8rem
 
 section.pokemons
 
   display: flex
   flex-wrap: wrap
-  margin-top: 5rem
+  margin: 5rem 10rem
 
   .card-pokemon
     width: 30rem
@@ -81,7 +81,7 @@ section.pokemons
     transform: scale(1.1)
 
   .card-pokemon:hover img
-    transform: scale(1.1)
+    transform: scale(1.2)
 
 .overlay
   display: absolute
@@ -94,3 +94,16 @@ section.pokemons
   height: 50rem
   background-color: red
   margin: 0 auto
+
+
+@media only screen and (max-width: 550px)
+  h1.pokedex
+    padding: 0
+    width: fit-content
+    margin: 2rem auto
+    font-size: 5rem
+
+@media only screen and (max-width: 875px)
+  section.pokemons
+    margin: 5rem 0
+    justify-content: center
