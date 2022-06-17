@@ -64,7 +64,7 @@ async function renderPokemons(pokemon) {
   cardPokemon.classList.add('card-pokemon')
   cardPokemon.style.backgroundColor = backgroundColor
   pokemonsSection.appendChild(cardPokemon)
-  cardPokemon.addEventListener('click', () => renderCardPokemons(pokemon) )
+  cardPokemon.addEventListener('click', () => renderCardPokemons(pokemon))
   const itemsCard = document.createElement('div')
   itemsCard.classList.add('items')
   cardPokemon.appendChild(itemsCard)
@@ -92,10 +92,15 @@ async function renderPokemons(pokemon) {
 }
 
 async function renderCardPokemons(pokemon) {
-  const { id, name, sprites, types } = pokemon
-  let backgroundColor
+  const { id, name, sprites, types, weight, height, abilities } = pokemon
+  let backgroundColor, color
   let firstpower = ''
   let secondpower = ''
+  let firstAbility = ''
+  let secondAbility = ''
+  let eggGroups = ''
+  let weightConvert = weight.toString().split('')
+  let heightConvert = height.toString().split('')
 
   firstpower = types[0].type.name
   types.length > 1 ? (secondpower = types[1].type.name) : (secondpower = '')
@@ -106,14 +111,15 @@ async function renderCardPokemons(pokemon) {
     })
     .then(data => {
       backgroundColor = data.color.name
+      color = data.color.name
       for (let i = 0; i < changePokemonsColors.length; i++) {
         if (data.color.name.includes(changePokemonsColors[i].originalColor)) {
           backgroundColor = changePokemonsColors[i].substituteColor
         }
       }
+      eggGroups = data.egg_groups[0].name
     })
 
-  console.log(pokemon)
   const overlayElement = document.createElement('div')
   overlayElement.classList.add('overlay')
   pokemonsSection.appendChild(overlayElement)
@@ -175,7 +181,13 @@ async function renderCardPokemons(pokemon) {
   powersElement.appendChild(secondPower)
 
   const spanDescription = document.createElement('span')
-  spanDescription.textContent = '#001'
+  if (id < 10) {
+    spanDescription.textContent = `#00${id}`
+  } else if (id >= 100) {
+    spanDescription.textContent = `#${id}`
+  } else {
+    spanDescription.textContent = `#0${id}`
+  }
   topInfoElement.appendChild(spanDescription)
 
   const imgPokemonElement = document.createElement('img')
@@ -196,6 +208,7 @@ async function renderCardPokemons(pokemon) {
   const linkEvolutionElement = document.createElement('a')
   const linkMovesElement = document.createElement('a')
   linkAboutElement.textContent = 'About'
+  linkAboutElement.classList.add('active')
   linkEvolutionElement.textContent = 'Evolution'
   linkMovesElement.textContent = 'Moves'
   bottomOptionsElement.appendChild(linkAboutElement)
@@ -219,10 +232,10 @@ async function renderCardPokemons(pokemon) {
   const heightLabelElement = document.createElement('p')
   const weightLabelElement = document.createElement('p')
   const abilitiesLabelElement = document.createElement('p')
-  speciesLabelElement.textContent = ' Species'
+  speciesLabelElement.textContent = 'Color'
   heightLabelElement.textContent = 'Height'
   weightLabelElement.textContent = 'Weight'
-  abilitiesLabelElement.textContent = 'Abilities'
+  abilitiesLabelElement.textContent = (abilities.length>1) ? 'Abilities' :'Ability'
   firstCol.appendChild(speciesLabelElement)
   firstCol.appendChild(heightLabelElement)
   firstCol.appendChild(weightLabelElement)
@@ -231,14 +244,29 @@ async function renderCardPokemons(pokemon) {
   const secondCol = document.createElement('div')
   secondCol.classList.add('col-b')
 
+  if (weightConvert.length == 2) {
+    weightConvert = weightConvert.join('.')
+  } else {
+    weightConvert.pop()
+    weightConvert = weightConvert.join('')
+  }
+
+  heightConvert.length == 1
+    ? (heightConvert = `0.${heightConvert}0 cm`)
+    : (heightConvert = `${heightConvert.join('.')} m`)
+
+    firstAbility = abilities[0].ability.name
+    if (abilities.length>1) 
+    secondAbility = `, ${abilities[1].ability.name}`
+
   const speciesInput = document.createElement('p')
   const heightInput = document.createElement('p')
   const weightInput = document.createElement('p')
   const abilitiesInput = document.createElement('p')
-  speciesInput.textContent = 'Speed'
-  heightInput.textContent = '0.70cm'
-  weightInput.textContent = '6.9 kg'
-  abilitiesInput.textContent = 'Overgrow, Chirophyl'
+  speciesInput.textContent = color;
+  heightInput.textContent = heightConvert
+  weightInput.textContent = `${weightConvert} kg`
+  abilitiesInput.textContent = `${firstAbility} ${secondAbility}`
   secondCol.appendChild(speciesInput)
   secondCol.appendChild(heightInput)
   secondCol.appendChild(weightInput)
@@ -258,13 +286,10 @@ async function renderCardPokemons(pokemon) {
   firstColB.classList.add('col-a')
   secondSection.appendChild(firstColB)
 
-  const genderLabelElement = document.createElement('p')
   const eggGrupsLabelElement = document.createElement('p')
   const eggCycleLabelElement = document.createElement('p')
-  genderLabelElement.textContent = 'Gender'
   eggGrupsLabelElement.textContent = 'Egg Groups'
   eggCycleLabelElement.textContent = 'Egg Cycle'
-  firstColB.appendChild(genderLabelElement)
   firstColB.appendChild(eggGrupsLabelElement)
   firstColB.appendChild(eggCycleLabelElement)
 
@@ -272,13 +297,10 @@ async function renderCardPokemons(pokemon) {
   secondColB.classList.add('col-b')
   secondSection.appendChild(secondColB)
 
-  const genderInput = document.createElement('p')
   const eggGrupsInput = document.createElement('p')
   const eggCycleInput = document.createElement('p')
-  genderInput.textContent = '87.5% 12.5%'
-  eggGrupsInput.textContent = 'Monster'
-  eggCycleInput.textContent = 'Grass'
-  secondColB.appendChild(genderInput)
+  eggGrupsInput.textContent = eggGroups
+  eggCycleInput.textContent = firstpower
   secondColB.appendChild(eggGrupsInput)
   secondColB.appendChild(eggCycleInput)
 }

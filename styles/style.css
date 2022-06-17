@@ -103,8 +103,8 @@ section.pokemons .card-pokemon:hover img {
   bottom: 0;
   left: 0;
   z-index: 100;
-  width: 55rem;
-  height: 95rem;
+  width: 45em;
+  height: 60em;
   background-color: #40dcbd;
   border-radius: 5rem;
   margin: auto;
@@ -114,7 +114,6 @@ section.pokemons .card-pokemon:hover img {
   display: flex;
   justify-content: space-between;
   align-content: center;
-  margin: 2rem;
   padding: 3rem;
 }
 .modal .icons img {
@@ -130,7 +129,7 @@ section.pokemons .card-pokemon:hover img {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 3rem;
+  padding: 0 3rem;
 }
 .modal .top-info .description h4 {
   font-size: 4rem;
@@ -154,11 +153,12 @@ section.pokemons .card-pokemon:hover img {
 .modal .bottom-info {
   background-color: #202020;
   border-radius: 5rem;
-  padding-bottom: 6rem;
+  position: relative;
+  bottom: 5rem;
   width: 100%;
-  height: 50%;
-  padding: 5rem;
-  font-size: 1.8rem;
+  height: calc(50% + 1em);
+  padding: 2rem 5rem;
+  font-size: 1.6em;
 }
 .modal .bottom-info .options {
   display: flex;
@@ -169,15 +169,28 @@ section.pokemons .card-pokemon:hover img {
   text-decoration: none;
   color: var(--description);
   font-weight: bold;
+  cursor: pointer;
+}
+.modal .bottom-info .options a.active {
+  color: white;
 }
 .modal .bottom-info .line {
-  margin-top: 2rem;
+  margin-top: 1rem;
   height: 1px;
-  width: 45rem;
+  width: 24em;
   background: rgba(226, 226, 226, 0.5098039216);
 }
+.modal .bottom-info .line::before {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  left: 5rem;
+  height: 1px;
+  width: 5em;
+  background: #ffffff;
+}
 .modal .bottom-info .section {
-  margin: 2rem;
+  margin: 1em;
   display: flex;
 }
 .modal .bottom-info .section .col-a {
@@ -185,19 +198,21 @@ section.pokemons .card-pokemon:hover img {
 }
 .modal .bottom-info .section .col-b {
   margin-left: 8rem;
+  text-transform: capitalize;
 }
 .modal .bottom-info .section.second .col-b {
   margin-left: 5rem;
 }
 .modal .bottom-info h4 {
-  margin: 2rem;
+  margin: 1rem;
 }
 .modal img.pokemon {
   position: relative;
-  left: 15rem;
-  top: 4rem;
-  width: 25rem;
-  height: 25rem;
+  left: 30%;
+  top: -2.8rem;
+  z-index: 3;
+  width: 20rem;
+  height: 20rem;
 }
 
 .modal::before {
