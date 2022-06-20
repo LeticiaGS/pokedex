@@ -24,13 +24,6 @@ body {
   font-size: 1.2rem;
 }
 
-h1.pokedex {
-  margin: 5rem 10rem;
-  padding-left: 2rem;
-  font-size: 7rem;
-  text-transform: capitalize;
-}
-
 p.power {
   width: fit-content;
   padding: 0.5rem 1.6rem;
@@ -39,10 +32,70 @@ p.power {
   filter: brightness(1.1);
 }
 
-section.pokemons {
+.sorryMessage {
+  text-align: center;
+}
+
+header {
+  display: grid;
+  width: 100%;
+  grid-template-columns: auto;
+  align-items: center;
+  justify-content: center;
+  margin-block: 5rem;
+}
+header h1.pokedex {
+  justify-self: center;
+  display: grid;
+  font-size: 7rem;
+  text-transform: capitalize;
+  width: fit-content;
+}
+header .search-img {
   display: flex;
-  flex-wrap: wrap;
-  margin: 5rem 10rem;
+}
+header .search-img .search {
+  width: 62em;
+  display: grid;
+  height: 5rem;
+  background: #FFFFFF;
+  opacity: 0.3;
+  border-radius: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+header .search-img .search input {
+  width: 90%;
+  height: 100%;
+  border: none;
+  font-size: 2rem;
+  font-weight: 600;
+}
+header .search-img .search input:focus {
+  box-shadow: 0 0 0 0;
+  border: 0 none;
+  outline: 0;
+}
+header .search-img .search span {
+  color: black;
+  cursor: pointer;
+}
+header .search-img img {
+  margin-left: 2rem;
+  cursor: pointer;
+  width: 5rem;
+  height: 5rem;
+}
+header .search-img img:hover {
+  animation: shake 0.5s infinite;
+}
+
+section.pokemons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30rem, auto));
+  column-gap: 2rem;
+  margin-inline: 8rem;
 }
 section.pokemons .card-pokemon {
   width: 30rem;
@@ -63,8 +116,8 @@ section.pokemons .card-pokemon {
   transition: transform 0.5s ease;
 }
 section.pokemons .card-pokemon .items h3 {
-  font-size: 2rem;
   margin-bottom: 1.5rem;
+  font-size: 2rem;
   text-transform: capitalize;
 }
 section.pokemons .card-pokemon .items p.power:last-child {
@@ -230,6 +283,17 @@ section.pokemons .card-pokemon:hover img {
   z-index: -1;
 }
 
+@keyframes shake {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  20%, 60% {
+    transform: rotate(6deg);
+  }
+  40%, 80% {
+    transform: rotate(-6deg);
+  }
+}
 @media only screen and (max-width: 550px) {
   h1.pokedex {
     padding: 0;

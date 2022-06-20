@@ -1,4 +1,9 @@
 const pokemonsSection = document.querySelector('.pokemons')
+const input = document.querySelector('input')
+const searchButton = document.getElementById('icon-search')
+
+searchButton.addEventListener('click', searchPokemon)
+const url = `https://pokeapi.co/api/v2/pokemon`
 
 const changePokemonsColors = [
   { originalColor: 'yellow', substituteColor: '#F1B81A' },
@@ -11,8 +16,42 @@ const changePokemonsColors = [
   { originalColor: 'purple', substituteColor: '#674D7D' }
 ]
 
+function clearAllCards() {
+  pokemonsSection.innerHTML = ''
+}
+
+input.addEventListener('keyup', e => {
+  if (e.keyCode == 13) {
+    searchPokemon()
+    return
+  }
+})
+
+async function searchPokemon() {
+  const inputValue = input.value.trim().toLowerCase()
+  clearAllCards()
+  if (inputValue != '') {
+    const getPokemonByName = `${url}/${inputValue}`
+    await fetch(getPokemonByName)
+      .then(response => {
+        if (!response.ok) {
+          renderMessage()
+          throw new Error(response.statusText)
+        } else {
+          response.json()
+        }
+      })
+      .then(data => renderPokemons(data))
+      .catch(e => {
+        console.log('catch:', e)
+      })
+  } else {
+    fetchPokemons()
+  }
+}
+
 async function fetchPokemons() {
-  const getPokemonUrl = id => `https://pokeapi.co/api/v2/pokemon/${id}`
+  const getPokemonUrl = id => `${url}/${id}`
 
   const pokemonPromises = []
 
@@ -30,8 +69,8 @@ async function fetchPokemons() {
 }
 
 async function getColorPokemon(id) {
-  const url = `https://pokeapi.co/api/v2/pokemon-species/${id}/`
-  return fetch(url)
+  const urlColor = `${url}-species/${id}/`
+  return fetch(urlColor)
 }
 
 window.onload = async () => {
@@ -100,7 +139,7 @@ async function renderCardPokemons(pokemon) {
   let secondAbility = ''
   let eggGroups = ''
   let weightConvert = weight.toString().split('')
-  let heightConvert = height.toString().split('')
+  let heightConvert = `${height / 10} m`
 
   firstpower = types[0].type.name
   types.length > 1 ? (secondpower = types[1].type.name) : (secondpower = '')
@@ -235,7 +274,8 @@ async function renderCardPokemons(pokemon) {
   speciesLabelElement.textContent = 'Color'
   heightLabelElement.textContent = 'Height'
   weightLabelElement.textContent = 'Weight'
-  abilitiesLabelElement.textContent = (abilities.length>1) ? 'Abilities' :'Ability'
+  abilitiesLabelElement.textContent =
+    abilities.length > 1 ? 'Abilities' : 'Ability'
   firstCol.appendChild(speciesLabelElement)
   firstCol.appendChild(heightLabelElement)
   firstCol.appendChild(weightLabelElement)
@@ -251,19 +291,14 @@ async function renderCardPokemons(pokemon) {
     weightConvert = weightConvert.join('')
   }
 
-  heightConvert.length == 1
-    ? (heightConvert = `0.${heightConvert}0 cm`)
-    : (heightConvert = `${heightConvert.join('.')} m`)
-
-    firstAbility = abilities[0].ability.name
-    if (abilities.length>1) 
-    secondAbility = `, ${abilities[1].ability.name}`
+  firstAbility = abilities[0].ability.name
+  if (abilities.length > 1) secondAbility = `, ${abilities[1].ability.name}`
 
   const speciesInput = document.createElement('p')
   const heightInput = document.createElement('p')
   const weightInput = document.createElement('p')
   const abilitiesInput = document.createElement('p')
-  speciesInput.textContent = color;
+  speciesInput.textContent = color
   heightInput.textContent = heightConvert
   weightInput.textContent = `${weightConvert} kg`
   abilitiesInput.textContent = `${firstAbility} ${secondAbility}`
@@ -303,4 +338,12 @@ async function renderCardPokemons(pokemon) {
   eggCycleInput.textContent = firstpower
   secondColB.appendChild(eggGrupsInput)
   secondColB.appendChild(eggCycleInput)
+}
+
+function renderMessage() {
+  const sorryMenssage = document.createElement('h1')
+  sorryMenssage.classList.add('sorryMessage')
+  sorryMenssage.textContent =
+    'Desculpa, não conseguimos escontrar esse pokemon. Verifique se digitou corretamente seu nome.'
+  pokemonsSection.appendChild(sorryMenssage)
 }
