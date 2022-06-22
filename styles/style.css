@@ -88,7 +88,7 @@ header .search-img img {
   height: 5rem;
 }
 header .search-img img:hover {
-  animation: shake 0.5s infinite;
+  animation: shake 0.5s ease;
 }
 
 section.pokemons {
@@ -223,24 +223,20 @@ section.pokemons .card-pokemon:hover img {
   color: var(--description);
   font-weight: bold;
   cursor: pointer;
+  position: relative;
+  padding: 0.5rem 1.5rem;
 }
 .modal .bottom-info .options a.active {
   color: white;
+  border-bottom: 2px solid white;
 }
 .modal .bottom-info .line {
-  margin-top: 1rem;
-  height: 1px;
-  width: 24em;
-  background: rgba(226, 226, 226, 0.5098039216);
-}
-.modal .bottom-info .line::before {
-  content: "";
-  display: inline-block;
+  top: 5.9rem;
   position: absolute;
-  left: 5rem;
-  height: 1px;
-  width: 5em;
-  background: #ffffff;
+  height: 2px;
+  left: 7rem;
+  width: 20.8em;
+  background: rgba(226, 226, 226, 0.5098039216);
 }
 .modal .bottom-info .section {
   margin: 1em;

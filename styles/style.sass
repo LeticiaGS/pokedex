@@ -80,7 +80,7 @@ header
       width: 5rem
       height: 5rem
       &:hover
-        animation: shake 0.5s infinite
+        animation: shake 0.5s ease
 
 section.pokemons
 
@@ -147,7 +147,6 @@ section.pokemons
 
 .modal
   position: fixed
-  //display: none
 
   top: 0
   right: 0
@@ -222,24 +221,22 @@ section.pokemons
         color: var(--description)
         font-weight: bold
         cursor: pointer
+        position: relative
+        padding: 0.5rem  1.5rem
+        
 
       a.active
         color: white
+        border-bottom: 2px solid white
 
     .line
-      margin-top: 1rem
-      height: 1px
-      width: 24em
+      top: 5.9rem
+      position: absolute
+      height: 2px
+      left: 7rem
+      width: 20.8em
       background: #e2e2e282
 
-    .line::before
-      content: ''
-      display: inline-block
-      position: absolute
-      left: 5rem
-      height: 1px
-      width: 5em
-      background: #ffffff
 
     .section
       margin: 1em
