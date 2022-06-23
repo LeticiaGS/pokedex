@@ -201,6 +201,14 @@ section.pokemons
       font-size: 2.5rem
       font-weight: bold
 
+  img.pokemon
+    position: relative
+    left: 30%
+    top: -2.8rem
+    z-index: 3
+    width: 20rem
+    height: 20rem
+
   .bottom-info
     background-color: #202020
     border-radius: 5rem
@@ -222,8 +230,7 @@ section.pokemons
         font-weight: bold
         cursor: pointer
         position: relative
-        padding: 0.5rem  1.5rem
-        
+        padding: 0.5rem 1.5rem
 
       a.active
         color: white
@@ -237,32 +244,76 @@ section.pokemons
       width: 20.8em
       background: #e2e2e282
 
+    .descriptions
+      .section
+        margin: 1em
+        display: flex
 
-    .section
-      margin: 1em
+        .col-a
+          color: var(--description)
+
+        .col-b
+          margin-left: 8rem
+          text-transform: capitalize
+
+        &.second
+          .col-b
+            margin-left: 5rem
+
+      h4
+       margin: 1.5rem
+
+    .statsBox
       display: flex
+      flex-direction: column
+      text-transform: uppercase
 
+      .stats
+        display: flex
+        align-items: center
+        justify-content: space-around
+        margin-top: 1rem
+
+        p
+          width: 4.4rem
+
+        &:first-of-type
+          margin-top: 3rem
+
+      .progressBox
+        display: block
+        width: 25rem
+        height: 1.5rem
+        border: 1px solid #000
+        background: #000
+        border-radius: 2rem
+        position: relative
+
+        .progress
+          display: block
+          width: 55%
+          height: 100%
+          background: #497c43
+          border-radius: 2rem
+          position: absolute
+          top: 0
+          left: 0
+
+    .movesBox
+      padding: 3rem 3rem 3rem 2rem
+      text-transform: capitalize
+      justify-content: space-between
+      display: flex
       .col-a
-        color: var(--description)
+        display: flex
+        flex-direction: column
 
       .col-b
-        margin-left: 8rem
-        text-transform: capitalize
-
-      &.second
-        .col-b
-          margin-left: 5rem
-
-    h4
-      margin: 1rem
-
-  img.pokemon
-    position: relative
-    left: 30%
-    top: -2.8rem
-    z-index: 3
-    width: 20rem
-    height: 20rem
+        text-align: center
+      
+      p
+        color: var(--description)
+        margin-top: 0.5rem
 
 .modal::before
   content: ''

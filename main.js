@@ -5,7 +5,7 @@ const searchButton = document.getElementById('icon-search')
 let cardLinks = []
 
 searchButton.addEventListener('click', searchPokemon)
-const url = `https://pokeapi.co/api/v2/pokemon`
+const url = `https://pokeapi.co/api/v2/`
 
 const changePokemonsColors = [
   { originalColor: 'yellow', substituteColor: '#F1B81A' },
@@ -33,7 +33,7 @@ async function searchPokemon() {
   const inputValue = input.value.trim().toLowerCase()
   clearAllCards()
   if (inputValue != '') {
-    const getPokemonByName = `${url}/${inputValue}`
+    const getPokemonByName = `${url}pokemon/${inputValue}`
     await fetch(getPokemonByName)
       .then(response => {
         if (!response.ok) {
@@ -53,7 +53,7 @@ async function searchPokemon() {
 }
 
 async function fetchPokemons() {
-  const getPokemonUrl = id => `${url}/${id}`
+  const getPokemonUrl = id => `${url}pokemon/${id}`
 
   const pokemonPromises = []
 
@@ -71,7 +71,7 @@ async function fetchPokemons() {
 }
 
 async function getColorPokemon(id) {
-  const urlColor = `${url}-species/${id}/`
+  const urlColor = `${url}pokemon-species/${id}/`
   return fetch(urlColor)
 }
 
@@ -127,7 +127,7 @@ async function renderPokemons(pokemon) {
   if (secondpower != '') itemsCard.appendChild(secondpowerElement)
 
   const imgPokemonElement = document.createElement('img')
-  imgPokemonElement.src = sprites.other.home.front_shiny
+  imgPokemonElement.src = sprites.other.home.front_default
   imgPokemonElement.alt = name
   cardPokemon.appendChild(imgPokemonElement)
 }
@@ -138,6 +138,7 @@ async function renderCardPokemons(pokemon) {
   let firstpower = ''
   let secondpower = ''
 
+  console.log(pokemon)
   firstpower = types[0].type.name
   types.length > 1 ? (secondpower = types[1].type.name) : (secondpower = '')
 
@@ -156,7 +157,6 @@ async function renderCardPokemons(pokemon) {
   overlayElement.classList.add('overlay')
   pokemonsSection.appendChild(overlayElement)
   overlayElement.addEventListener('click', () => {
-    overlayElement.style.display = 'none'
     destroyModalOverlay()
   })
 
@@ -180,8 +180,7 @@ async function renderCardPokemons(pokemon) {
   iconCloseElement.classList.add('fa-2xl')
   iconsElement.appendChild(iconCloseElement)
   iconCloseElement.addEventListener('click', () => {
-    overlayElement.style.display = 'none'
-    modalElement.style.display = 'none'
+    destroyModalOverlay()
   })
 
   const topInfoElement = document.createElement('div')
@@ -224,7 +223,7 @@ async function renderCardPokemons(pokemon) {
 
   const imgPokemonElement = document.createElement('img')
   imgPokemonElement.classList.add('pokemon')
-  imgPokemonElement.src = sprites.other.home.front_shiny
+  imgPokemonElement.src = sprites.other.home.front_default
   imgPokemonElement.alt = name
   modalElement.appendChild(imgPokemonElement)
 
@@ -291,24 +290,32 @@ function addOrRemoveActive(selectedAttribute) {
 }
 
 async function setBottomInfoElements(selectedAttribute, pokemon) {
+  let backgroundColor
+  let color = ''
+  let eggGroups = ''
+  const { id, moves } = pokemon
+  await getColorPokemon(id).then(response => {
+    return response.json().then(data => {
+      backgroundColor = data.color.name
+      color = data.color.name
+      eggGroups = data.egg_groups[0].name
+      for (let i = 0; i < changePokemonsColors.length; i++) {
+        if (data.color.name.includes(changePokemonsColors[i].originalColor)) {
+          backgroundColor = changePokemonsColors[i].substituteColor
+        }
+      }
+    })
+  })
+
   if (selectedAttribute === 'about') {
-    const { id, weight, height, abilities, types } = pokemon
-    let color = ''
+    const { weight, height, abilities, types } = pokemon
     let firstpower = ''
     let firstAbility = ''
     let secondAbility = ''
-    let eggGroups = ''
     let weightConvert = weight.toString().split('')
     let heightConvert = `${height / 10} m`
 
     firstpower = types[0].type.name
-
-    await getColorPokemon(id).then(response => {
-      return response.json().then(data => {
-        color = data.color.name
-        eggGroups = data.egg_groups[0].name
-      })
-    })
 
     const descriptions = document.createElement('div')
     descriptions.classList.add('descriptions')
@@ -397,6 +404,98 @@ async function setBottomInfoElements(selectedAttribute, pokemon) {
 
     return descriptions
   }
+
+  if (selectedAttribute === 'stats') {
+    const { stats } = pokemon
+    const descriptions = document.createElement('div')
+    descriptions.classList.add('statsBox')
+
+    stats.forEach(stats => {
+      const content = document.createElement('div')
+      content.classList.add('stats')
+      const hpLabel = document.createElement('p')
+      const hpValue = document.createElement('span')
+      hpValue.textContent = stats.base_stat
+      switch (stats.stat.name) {
+        case 'attack':
+          hpLabel.textContent = 'atk'
+          break
+        case 'defense':
+          hpLabel.textContent = 'def'
+          break
+        case 'special-attack':
+          hpLabel.textContent = 'satk'
+          break
+        case 'special-defense':
+          hpLabel.textContent = 'sdef'
+          break
+        case 'speed':
+          hpLabel.textContent = 'spd'
+          break
+        default:
+          hpLabel.textContent = stats.stat.name
+      }
+      const hpProgressBox = document.createElement('div')
+      hpProgressBox.classList.add('progressBox')
+      const hpProgress = document.createElement('div')
+      hpProgress.classList.add('progress')
+      hpProgress.style.width = `${stats.base_stat / 2}%`
+      hpProgress.style.backgroundColor = backgroundColor
+      descriptions.appendChild(content)
+      content.appendChild(hpLabel)
+      content.appendChild(hpValue)
+      hpProgressBox.appendChild(hpProgress)
+      content.appendChild(hpProgressBox)
+    })
+
+    return descriptions
+  }
+
+  if (selectedAttribute === 'moves') {
+    let i = 0
+    console.log(pokemon)
+    const movesBox = document.createElement('div')
+    movesBox.classList.add('movesBox')
+
+    const moveLabel = document.createElement('h4')
+    moveLabel.textContent = 'Moves'
+    
+    const cola = document.createElement('div')
+    cola.classList.add('col-a')
+    cola.appendChild(moveLabel)
+    movesBox.appendChild(cola)
+
+    const colb = document.createElement('div')
+    colb.classList.add('col-b')
+    const levelLabel = document.createElement('h4')
+    levelLabel.textContent = 'Level'
+    colb.appendChild(levelLabel)
+    movesBox.appendChild(colb) 
+
+    const colc = document.createElement('div')
+    colc.classList.add('col-c')
+    const methodLabel = document.createElement('h4')
+    methodLabel.textContent = 'Method'
+    colc.appendChild(methodLabel)
+    movesBox.appendChild(colc) 
+
+    while (i < 5 && i <= moves.length - 1) {
+      const move = document.createElement('p')
+      move.textContent = moves[i].move.name
+      cola.appendChild(move)
+
+      const level = document.createElement('p')
+      level.textContent = moves[i].version_group_details[0].level_learned_at
+      colb.appendChild(level)
+
+      const method = document.createElement('p')
+      method.textContent = moves[i].version_group_details[0].move_learn_method.name
+      colc.appendChild(method)
+
+      i++
+    }
+    return movesBox
+  }
 }
 
 function destroyBottomInfoElement() {
@@ -404,12 +503,24 @@ function destroyBottomInfoElement() {
   if (description != null) {
     description.remove()
   }
+  const statsBox = document.querySelector('.statsBox')
+  if (statsBox != null) {
+    statsBox.remove()
+  }
+  const movesBox = document.querySelector('.movesBox')
+  if (movesBox != null) {
+    movesBox.remove()
+  }
 }
 
 function destroyModalOverlay() {
   const modal = document.querySelector('.modal')
   if (modal != null) {
     modal.remove()
+  }
+  const overlay = document.querySelector('.overlay')
+  if (overlay != null) {
+    overlay.remove()
   }
 }
 

@@ -203,6 +203,14 @@ section.pokemons .card-pokemon:hover img {
   font-size: 2.5rem;
   font-weight: bold;
 }
+.modal img.pokemon {
+  position: relative;
+  left: 30%;
+  top: -2.8rem;
+  z-index: 3;
+  width: 20rem;
+  height: 20rem;
+}
 .modal .bottom-info {
   background-color: #202020;
   border-radius: 5rem;
@@ -238,30 +246,75 @@ section.pokemons .card-pokemon:hover img {
   width: 20.8em;
   background: rgba(226, 226, 226, 0.5098039216);
 }
-.modal .bottom-info .section {
+.modal .bottom-info .descriptions .section {
   margin: 1em;
   display: flex;
 }
-.modal .bottom-info .section .col-a {
+.modal .bottom-info .descriptions .section .col-a {
   color: var(--description);
 }
-.modal .bottom-info .section .col-b {
+.modal .bottom-info .descriptions .section .col-b {
   margin-left: 8rem;
   text-transform: capitalize;
 }
-.modal .bottom-info .section.second .col-b {
+.modal .bottom-info .descriptions .section.second .col-b {
   margin-left: 5rem;
 }
-.modal .bottom-info h4 {
-  margin: 1rem;
+.modal .bottom-info .descriptions h4 {
+  margin: 1.5rem;
 }
-.modal img.pokemon {
+.modal .bottom-info .statsBox {
+  display: flex;
+  flex-direction: column;
+  text-transform: uppercase;
+}
+.modal .bottom-info .statsBox .stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 1rem;
+}
+.modal .bottom-info .statsBox .stats p {
+  width: 4.4rem;
+}
+.modal .bottom-info .statsBox .stats:first-of-type {
+  margin-top: 3rem;
+}
+.modal .bottom-info .statsBox .progressBox {
+  display: block;
+  width: 25rem;
+  height: 1.5rem;
+  border: 1px solid #000;
+  background: #000;
+  border-radius: 2rem;
   position: relative;
-  left: 30%;
-  top: -2.8rem;
-  z-index: 3;
-  width: 20rem;
-  height: 20rem;
+}
+.modal .bottom-info .statsBox .progressBox .progress {
+  display: block;
+  width: 55%;
+  height: 100%;
+  background: #497c43;
+  border-radius: 2rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.modal .bottom-info .movesBox {
+  padding: 3rem 3rem 3rem 2rem;
+  text-transform: capitalize;
+  justify-content: space-between;
+  display: flex;
+}
+.modal .bottom-info .movesBox .col-a {
+  display: flex;
+  flex-direction: column;
+}
+.modal .bottom-info .movesBox .col-b {
+  text-align: center;
+}
+.modal .bottom-info .movesBox p {
+  color: var(--description);
+  margin-top: 0.5rem;
 }
 
 .modal::before {
