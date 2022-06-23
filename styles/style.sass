@@ -27,6 +27,7 @@ p.power
   background-color: #40dcbd
   filter: brightness(1.1)
 
+
 .sorryMessage
   text-align: center
 
@@ -38,10 +39,10 @@ header
   justify-content: center
   margin-block: 5rem
 
-  h1.pokedex
+  h1#pokedex
     justify-self: center
     display: grid
-    font-size: 7rem
+    font-size: 5rem
     text-transform: capitalize
     width: fit-content
 
@@ -79,6 +80,9 @@ header
       cursor: pointer
       width: 5rem
       height: 5rem
+
+      &#bagPokemon
+        display: none
       &:hover
         animation: shake 0.5s ease
 
@@ -343,7 +347,7 @@ section.pokemons
     transform: rotate(-6deg)
 
 @media only screen and (max-width: 550px)
-  h1.pokedex
+  h1#pokedex
     padding: 0
     width: fit-content
     margin: 2rem auto

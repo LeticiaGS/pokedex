@@ -1,6 +1,9 @@
 const pokemonsSection = document.querySelector('.pokemons')
 const input = document.querySelector('input')
 const searchButton = document.getElementById('icon-search')
+const backpackElement = document.getElementById('backpack')
+const bagPokemonElement = document.getElementById('bagPokemon')
+const titlePage = document.getElementById('pokedex')
 
 let cardLinks = []
 
@@ -22,6 +25,20 @@ function clearAllCards() {
   pokemonsSection.innerHTML = ''
 }
 
+backpackElement.addEventListener('click', () => {
+  input.value = ''
+  showFavoritePokemons () 
+})
+
+bagPokemonElement.addEventListener('click', () => {
+  clearAllCards()
+  fetchPokemons()
+  input.value = ''
+  backpackElement.style.display = 'block'
+  bagPokemonElement.style.display = 'none'
+  titlePage.textContent = 'Pokedex'
+})
+
 input.addEventListener('keyup', e => {
   if (e.keyCode == 13) {
     searchPokemon()
@@ -29,7 +46,22 @@ input.addEventListener('keyup', e => {
   }
 })
 
+function showFavoritePokemons () {
+  clearAllCards()
+  const pokemons = getFavoritePokemons() || []
+  if (pokemons.length == 0) {
+    sorryMenssage()
+  } else {
+    pokemons.forEach(pokemon => renderPokemons(pokemon))
+  }
+  backpackElement.style.display = 'none'
+  bagPokemonElement.style.display = 'block'
+  titlePage.textContent = 'My pokemons'
+}
+
 async function searchPokemon() {
+  backpackElement.style.display = 'block'
+  bagPokemonElement.style.display = 'block'
   const inputValue = input.value.trim().toLowerCase()
   clearAllCards()
   if (inputValue != '') {
@@ -73,6 +105,49 @@ async function fetchPokemons() {
 async function getColorPokemon(id) {
   const urlColor = `${url}pokemon-species/${id}/`
   return fetch(urlColor)
+}
+
+function favoriteButtonPressed(event, pokemon) {
+  const favoriteState = {
+    favorited: 'assets/heart-fill.svg',
+    notFavorited: 'assets/heart-empty.svg'
+  }
+
+  if (event.target.src.includes(favoriteState.notFavorited)) {
+    event.target.src = favoriteState.favorited
+    saveToLocalStorage(pokemon)
+
+  } else {
+    event.target.src = favoriteState.notFavorited
+    removeFromLocalStorage(pokemon.id)
+    if (titlePage.textContent == 'My pokemons') {
+      showFavoritePokemons()
+    }
+  }
+}
+
+function getFavoritePokemons() {
+  return JSON.parse(localStorage.getItem('favoritePokemons'))
+}
+
+function saveToLocalStorage(pokemon) {
+  const pokemons = getFavoritePokemons() || []
+  pokemons.push(pokemon)
+
+  const pokemonsJSON = JSON.stringify(pokemons)
+  localStorage.setItem('favoritePokemons', pokemonsJSON)
+}
+
+function checkPokeminIsFavorited(id) {
+  const pokemons = getFavoritePokemons() || []
+  return pokemons.find(pokemon => pokemon.id == id)
+}
+
+function removeFromLocalStorage(id) {
+  const pokemons = getFavoritePokemons() || []
+  const findPokemon = pokemons.find(pokemon => pokemon.id == id)
+  const newPokemons = pokemons.filter(pokemon => pokemon.id != findPokemon.id)
+  localStorage.setItem('favoritePokemons', JSON.stringify(newPokemons))
 }
 
 window.onload = async () => {
@@ -138,7 +213,7 @@ async function renderCardPokemons(pokemon) {
   let firstpower = ''
   let secondpower = ''
 
-  console.log(pokemon)
+  const isFavorited = checkPokeminIsFavorited(id)
   firstpower = types[0].type.name
   types.length > 1 ? (secondpower = types[1].type.name) : (secondpower = '')
 
@@ -170,9 +245,16 @@ async function renderCardPokemons(pokemon) {
   modalElement.appendChild(iconsElement)
 
   const iconHeartElement = document.createElement('img')
-  iconHeartElement.src = 'assets/heart-empty.svg'
-  iconHeartElement.alt = 'heart empty'
+  iconHeartElement.src = isFavorited
+    ? 'assets/heart-fill.svg'
+    : 'assets/heart-empty.svg'
+  iconHeartElement.alt = isFavorited
+    ? 'assets/heart-fill.svg'
+    : 'assets/heart-empty.svg'
   iconsElement.appendChild(iconHeartElement)
+  iconHeartElement.addEventListener('click', event => {
+    favoriteButtonPressed(event, pokemon)
+  })
 
   const iconCloseElement = document.createElement('i')
   iconCloseElement.classList.add('fa-solid')
@@ -265,28 +347,6 @@ async function renderCardPokemons(pokemon) {
 
   const content = await setBottomInfoElements('about', pokemon)
   bottomInfoElement.appendChild(content)
-}
-
-async function onItemClick(event, pokemon) {
-  const selectedAttribute = event.target.getAttribute('data')
-  addOrRemoveActive(selectedAttribute)
-  destroyBottomInfoElement()
-  const content = await setBottomInfoElements(selectedAttribute, pokemon)
-  if (content != undefined) {
-    const bottomInfo = document.querySelector('.bottom-info')
-    bottomInfo.appendChild(content)
-  }
-}
-
-function addOrRemoveActive(selectedAttribute) {
-  cardLinks.forEach(item => {
-    const itemAttribute = item.getAttribute('data')
-    if (itemAttribute === selectedAttribute) {
-      item.classList.add('active')
-      return
-    }
-    item.classList.remove('active')
-  })
 }
 
 async function setBottomInfoElements(selectedAttribute, pokemon) {
@@ -452,14 +512,12 @@ async function setBottomInfoElements(selectedAttribute, pokemon) {
   }
 
   if (selectedAttribute === 'moves') {
-    let i = 0
-    console.log(pokemon)
     const movesBox = document.createElement('div')
     movesBox.classList.add('movesBox')
 
     const moveLabel = document.createElement('h4')
     moveLabel.textContent = 'Moves'
-    
+
     const cola = document.createElement('div')
     cola.classList.add('col-a')
     cola.appendChild(moveLabel)
@@ -470,15 +528,16 @@ async function setBottomInfoElements(selectedAttribute, pokemon) {
     const levelLabel = document.createElement('h4')
     levelLabel.textContent = 'Level'
     colb.appendChild(levelLabel)
-    movesBox.appendChild(colb) 
+    movesBox.appendChild(colb)
 
     const colc = document.createElement('div')
     colc.classList.add('col-c')
     const methodLabel = document.createElement('h4')
     methodLabel.textContent = 'Method'
     colc.appendChild(methodLabel)
-    movesBox.appendChild(colc) 
+    movesBox.appendChild(colc)
 
+    let i = 0                                                                                                            
     while (i < 5 && i <= moves.length - 1) {
       const move = document.createElement('p')
       move.textContent = moves[i].move.name
@@ -489,13 +548,36 @@ async function setBottomInfoElements(selectedAttribute, pokemon) {
       colb.appendChild(level)
 
       const method = document.createElement('p')
-      method.textContent = moves[i].version_group_details[0].move_learn_method.name
+      method.textContent =
+        moves[i].version_group_details[0].move_learn_method.name
       colc.appendChild(method)
 
       i++
     }
     return movesBox
   }
+}
+
+async function onItemClick(event, pokemon) {
+  const selectedAttribute = event.target.getAttribute('data')
+  addOrRemoveActive(selectedAttribute)
+  destroyBottomInfoElement()
+  const content = await setBottomInfoElements(selectedAttribute, pokemon)
+  if (content != undefined) {
+    const bottomInfo = document.querySelector('.bottom-info')
+    bottomInfo.appendChild(content)
+  }
+}
+
+function addOrRemoveActive(selectedAttribute) {
+  cardLinks.forEach(item => {
+    const itemAttribute = item.getAttribute('data')
+    if (itemAttribute === selectedAttribute) {
+      item.classList.add('active')
+      return
+    }
+    item.classList.remove('active')
+  })
 }
 
 function destroyBottomInfoElement() {

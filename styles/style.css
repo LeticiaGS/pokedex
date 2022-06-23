@@ -44,10 +44,10 @@ header {
   justify-content: center;
   margin-block: 5rem;
 }
-header h1.pokedex {
+header h1#pokedex {
   justify-self: center;
   display: grid;
-  font-size: 7rem;
+  font-size: 5rem;
   text-transform: capitalize;
   width: fit-content;
 }
@@ -86,6 +86,9 @@ header .search-img img {
   cursor: pointer;
   width: 5rem;
   height: 5rem;
+}
+header .search-img img#bagPokemon {
+  display: none;
 }
 header .search-img img:hover {
   animation: shake 0.5s ease;
@@ -344,7 +347,7 @@ section.pokemons .card-pokemon:hover img {
   }
 }
 @media only screen and (max-width: 550px) {
-  h1.pokedex {
+  h1#pokedex {
     padding: 0;
     width: fit-content;
     margin: 2rem auto;
