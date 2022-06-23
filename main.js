@@ -1,3 +1,6 @@
+import { LocalStorage } from "././services/localStorage.js"
+import { API } from "./services/api.js"
+
 const pokemonsSection = document.querySelector('.pokemons')
 const input = document.querySelector('input')
 const searchButton = document.getElementById('icon-search')
@@ -7,8 +10,7 @@ const titlePage = document.getElementById('pokedex')
 
 let cardLinks = []
 
-searchButton.addEventListener('click', searchPokemon)
-const url = `https://pokeapi.co/api/v2/`
+searchButton.addEventListener('click', API.searchPokemon)
 
 const changePokemonsColors = [
   { originalColor: 'yellow', substituteColor: '#F1B81A' },
@@ -27,12 +29,12 @@ function clearAllCards() {
 
 backpackElement.addEventListener('click', () => {
   input.value = ''
-  showFavoritePokemons () 
+  showFavoritePokemons()
 })
 
 bagPokemonElement.addEventListener('click', () => {
   clearAllCards()
-  fetchPokemons()
+  API.fetchPokemons()
   input.value = ''
   backpackElement.style.display = 'block'
   bagPokemonElement.style.display = 'none'
@@ -41,70 +43,24 @@ bagPokemonElement.addEventListener('click', () => {
 
 input.addEventListener('keyup', e => {
   if (e.keyCode == 13) {
-    searchPokemon()
+    API.searchPokemon()
     return
   }
 })
 
-function showFavoritePokemons () {
+function showFavoritePokemons() {
   clearAllCards()
-  const pokemons = getFavoritePokemons() || []
+  const pokemons = LocalStorage.getFavoritePokemons() || []
   if (pokemons.length == 0) {
-    sorryMenssage()
+    const msg =
+      'Ainda Não possui pokemons favoritados :(. Que tal adicionar alguns?'
+    renderMessage(msg)
   } else {
     pokemons.forEach(pokemon => renderPokemons(pokemon))
   }
   backpackElement.style.display = 'none'
   bagPokemonElement.style.display = 'block'
   titlePage.textContent = 'My pokemons'
-}
-
-async function searchPokemon() {
-  backpackElement.style.display = 'block'
-  bagPokemonElement.style.display = 'block'
-  const inputValue = input.value.trim().toLowerCase()
-  clearAllCards()
-  if (inputValue != '') {
-    const getPokemonByName = `${url}pokemon/${inputValue}`
-    await fetch(getPokemonByName)
-      .then(response => {
-        if (!response.ok) {
-          renderMessage()
-          throw new Error(response.statusText)
-        }
-        response.json().then(data => {
-          if (data != undefined) renderPokemons(data)
-        })
-      })
-      .catch(e => {
-        console.log('catch:', e)
-      })
-  } else {
-    fetchPokemons()
-  }
-}
-
-async function fetchPokemons() {
-  const getPokemonUrl = id => `${url}pokemon/${id}`
-
-  const pokemonPromises = []
-
-  for (let i = 1; i <= 150; i++) {
-    pokemonPromises.push(
-      fetch(getPokemonUrl(i)).then(response => response.json())
-    )
-  }
-
-  Promise.all(pokemonPromises).then(pokemons => {
-    pokemons.forEach(pokemon => {
-      renderPokemons(pokemon)
-    })
-  })
-}
-
-async function getColorPokemon(id) {
-  const urlColor = `${url}pokemon-species/${id}/`
-  return fetch(urlColor)
 }
 
 function favoriteButtonPressed(event, pokemon) {
@@ -115,43 +71,18 @@ function favoriteButtonPressed(event, pokemon) {
 
   if (event.target.src.includes(favoriteState.notFavorited)) {
     event.target.src = favoriteState.favorited
-    saveToLocalStorage(pokemon)
-
+    LocalStorage.saveToLocalStorage(pokemon)
   } else {
     event.target.src = favoriteState.notFavorited
-    removeFromLocalStorage(pokemon.id)
+    LocalStorage.removeFromLocalStorage(pokemon.id)
     if (titlePage.textContent == 'My pokemons') {
       showFavoritePokemons()
     }
   }
 }
 
-function getFavoritePokemons() {
-  return JSON.parse(localStorage.getItem('favoritePokemons'))
-}
-
-function saveToLocalStorage(pokemon) {
-  const pokemons = getFavoritePokemons() || []
-  pokemons.push(pokemon)
-
-  const pokemonsJSON = JSON.stringify(pokemons)
-  localStorage.setItem('favoritePokemons', pokemonsJSON)
-}
-
-function checkPokeminIsFavorited(id) {
-  const pokemons = getFavoritePokemons() || []
-  return pokemons.find(pokemon => pokemon.id == id)
-}
-
-function removeFromLocalStorage(id) {
-  const pokemons = getFavoritePokemons() || []
-  const findPokemon = pokemons.find(pokemon => pokemon.id == id)
-  const newPokemons = pokemons.filter(pokemon => pokemon.id != findPokemon.id)
-  localStorage.setItem('favoritePokemons', JSON.stringify(newPokemons))
-}
-
 window.onload = async () => {
-  await fetchPokemons()
+  await API.fetchPokemons()
 }
 
 async function renderPokemons(pokemon) {
@@ -160,7 +91,7 @@ async function renderPokemons(pokemon) {
   let firstPower = ''
   let secondpower = ''
 
-  await getColorPokemon(id).then(response => {
+  await API.getColorPokemon(id).then(response => {
     return response.json().then(data => {
       backgroundColor = data.color.name
       for (let i = 0; i < changePokemonsColors.length; i++) {
@@ -213,11 +144,11 @@ async function renderCardPokemons(pokemon) {
   let firstpower = ''
   let secondpower = ''
 
-  const isFavorited = checkPokeminIsFavorited(id)
+  const isFavorited = LocalStorage.checkPokeminIsFavorited(id)
   firstpower = types[0].type.name
   types.length > 1 ? (secondpower = types[1].type.name) : (secondpower = '')
 
-  await getColorPokemon(id).then(response => {
+  await API.getColorPokemon(id).then(response => {
     return response.json().then(data => {
       backgroundColor = data.color.name
       for (let i = 0; i < changePokemonsColors.length; i++) {
@@ -350,11 +281,11 @@ async function renderCardPokemons(pokemon) {
 }
 
 async function setBottomInfoElements(selectedAttribute, pokemon) {
+  const { id, moves } = pokemon
   let backgroundColor
   let color = ''
   let eggGroups = ''
-  const { id, moves } = pokemon
-  await getColorPokemon(id).then(response => {
+  await API.getColorPokemon(id).then(response => {
     return response.json().then(data => {
       backgroundColor = data.color.name
       color = data.color.name
@@ -537,7 +468,7 @@ async function setBottomInfoElements(selectedAttribute, pokemon) {
     colc.appendChild(methodLabel)
     movesBox.appendChild(colc)
 
-    let i = 0                                                                                                            
+    let i = 0
     while (i < 5 && i <= moves.length - 1) {
       const move = document.createElement('p')
       move.textContent = moves[i].move.name
@@ -606,10 +537,15 @@ function destroyModalOverlay() {
   }
 }
 
-function renderMessage() {
-  const sorryMenssage = document.createElement('h1')
-  sorryMenssage.classList.add('sorryMessage')
-  sorryMenssage.textContent =
-    'Desculpa, não conseguimos escontrar esse pokemon. Verifique se digitou corretamente seu nome.'
-  pokemonsSection.appendChild(sorryMenssage)
+function renderMessage(text) {
+  const menssage = document.createElement('h1')
+  menssage.classList.add('message')
+  menssage.textContent = text
+  pokemonsSection.appendChild(menssage)
 }
+
+export const Main = {
+  renderPokemons,
+  clearAllCards,
+  renderMessage,
+} 
