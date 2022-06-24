@@ -27,7 +27,6 @@ p.power
   background-color: #40dcbd
   filter: brightness(1.1)
 
-
 .message
   text-align: center
 
@@ -265,7 +264,7 @@ section.pokemons
             margin-left: 5rem
 
       h4
-       margin: 1.5rem
+        margin: 1.5rem
 
     .statsBox
       display: flex
@@ -314,7 +313,7 @@ section.pokemons
 
       .col-b
         text-align: center
-      
+
       p
         color: var(--description)
         margin-top: 0.5rem
@@ -347,13 +346,86 @@ section.pokemons
     transform: rotate(-6deg)
 
 @media only screen and (max-width: 550px)
-  h1#pokedex
-    padding: 0
-    width: fit-content
-    margin: 2rem auto
-    font-size: 5rem
+  header
+    margin-top: 2rem
+    display: flex
+    flex-direction: column
 
-@media only screen and (max-width: 875px)
+    h1#pokedex
+      font-size: 3rem
+      justify-self: left
+      margin-bottom: 2rem
+    .search-img
+      width: 100vw
+      justify-content: center
+      .search
+        height: 4rem
+        width: 70%
+        height: 3.5rem
+        input
+          font-size: 1.4rem
+      img
+        width: 3rem
+        height: 3rem
+
   section.pokemons
-    margin: 5rem 0
+    margin-inline: 0
+    display: flex
+    flex-direction: column
+    align-items: center
     justify-content: center
+
+    .card-pokemon
+      width: 20rem
+      height: 25rem
+      flex-direction: column
+      background-size: cover
+      background-position: -105%
+
+      .items
+        h3
+          margin-bottom: 1rem
+        p
+          font-size: 1rem
+
+      img
+        width: 15rem
+        height: 15rem
+        position: absolute
+        top: 10rem
+        left: 3rem
+
+  .modal
+    width: 25em
+    height: 45em
+
+    .top-info
+      .description
+        h4
+          font-size: 2.5rem
+
+        .powers
+          font-size: 1rem
+
+      span
+        font-size: 1.5rem
+
+    img.pokemon
+      left: 20%
+
+    .bottom-info
+      font-size: 1rem
+      padding: 2rem
+      height: auto
+
+      .options
+        margin: 0
+
+      .line
+        left: 3rem
+        top: 4.6rem
+        width: 25em
+
+      .stats
+        span
+          margin-right: 1rem

@@ -347,17 +347,92 @@ section.pokemons .card-pokemon:hover img {
   }
 }
 @media only screen and (max-width: 550px) {
-  h1#pokedex {
-    padding: 0;
-    width: fit-content;
-    margin: 2rem auto;
-    font-size: 5rem;
+  header {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
   }
-}
-@media only screen and (max-width: 875px) {
-  section.pokemons {
-    margin: 5rem 0;
+  header h1#pokedex {
+    font-size: 3rem;
+    justify-self: left;
+    margin-bottom: 2rem;
+  }
+  header .search-img {
+    width: 100vw;
     justify-content: center;
+  }
+  header .search-img .search {
+    height: 4rem;
+    width: 70%;
+    height: 3.5rem;
+  }
+  header .search-img .search input {
+    font-size: 1.4rem;
+  }
+  header .search-img img {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  section.pokemons {
+    margin-inline: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  section.pokemons .card-pokemon {
+    width: 20rem;
+    height: 25rem;
+    flex-direction: column;
+    background-size: cover;
+    background-position: -105%;
+  }
+  section.pokemons .card-pokemon .items h3 {
+    margin-bottom: 1rem;
+  }
+  section.pokemons .card-pokemon .items p {
+    font-size: 1rem;
+  }
+  section.pokemons .card-pokemon img {
+    width: 15rem;
+    height: 15rem;
+    position: absolute;
+    top: 10rem;
+    left: 3rem;
+  }
+
+  .modal {
+    width: 25em;
+    height: 45em;
+  }
+  .modal .top-info .description h4 {
+    font-size: 2.5rem;
+  }
+  .modal .top-info .description .powers {
+    font-size: 1rem;
+  }
+  .modal .top-info span {
+    font-size: 1.5rem;
+  }
+  .modal img.pokemon {
+    left: 20%;
+  }
+  .modal .bottom-info {
+    font-size: 1rem;
+    padding: 2rem;
+    height: auto;
+  }
+  .modal .bottom-info .options {
+    margin: 0;
+  }
+  .modal .bottom-info .line {
+    left: 3rem;
+    top: 4.6rem;
+    width: 25em;
+  }
+  .modal .bottom-info .stats span {
+    margin-right: 1rem;
   }
 }
 
