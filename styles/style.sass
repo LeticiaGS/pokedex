@@ -36,7 +36,7 @@ header
   grid-template-columns: auto
   align-items: center
   justify-content: center
-  margin-block: 5rem
+  margin-bottom: 5rem
 
   h1#pokedex
     justify-self: center
@@ -113,6 +113,7 @@ section.pokemons
     background-size: contain
     background-position: 130%
     transition: transform .5s ease
+    z-index: 100
 
     .items
       h3
@@ -332,6 +333,21 @@ section.pokemons
   background-position: 130%
   z-index: -1
 
+.to-top
+  width: fit-content
+  background: #2f013d
+  padding: 1.5rem 2rem
+  border-radius: 50%
+  margin: 1rem
+  position: fixed
+  z-index: 101
+  right: 1rem
+  bottom: 0.2rem
+
+  a
+    text-decoration: none
+    color: white
+
 @keyframes shake
   0%,
   100%
@@ -346,8 +362,12 @@ section.pokemons
     transform: rotate(-6deg)
 
 @media only screen and (max-width: 780px)
+
+  .to-top
+   padding: 1rem 1.5rem
+
   header
-    margin-top: 2rem
+    padding: 0
     display: flex
     flex-direction: column
 
@@ -431,3 +451,5 @@ section.pokemons
       .stats
         span
           margin-right: 1rem
+
+
