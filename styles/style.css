@@ -159,7 +159,7 @@ section.pokemons .card-pokemon:hover img {
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 100;
+  z-index: 101;
   width: 45em;
   height: 60em;
   background-color: #40dcbd;
@@ -322,6 +322,7 @@ section.pokemons .card-pokemon:hover img {
 
 .modal::before {
   content: "";
+  z-index: -1;
   position: absolute;
   left: 0;
   top: 0;
