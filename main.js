@@ -7,6 +7,7 @@ const searchButton = document.getElementById('icon-search')
 const backpackElement = document.getElementById('backpack')
 const bagPokemonElement = document.getElementById('bagPokemon')
 const titlePage = document.getElementById('pokedex')
+const btnToTop = document.getElementById('btn-to-top')
 
 let cardLinks = []
 
@@ -548,9 +549,13 @@ function mediaQuerie(value) {
   if (value.matches) {
     searchButton.classList.remove('fa-2x')
     searchButton.classList.add('fa-1x')
+    btnToTop.classList.remove('fa-2x')
+    btnToTop.classList.add('fa-1x')
   } else {
     searchButton.classList.add('fa-2x')
     searchButton.classList.remove('fa-1x')
+    btnToTop.classList.add('fa-2x')
+    btnToTop.classList.remove('fa-1x')
   }
 }
 
