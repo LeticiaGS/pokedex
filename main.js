@@ -544,6 +544,20 @@ function renderMessage(text) {
   pokemonsSection.appendChild(menssage)
 }
 
+function mediaQuerie(value) {
+  if (value.matches) {
+    searchButton.classList.remove('fa-2x')
+    searchButton.classList.add('fa-1x')
+  } else {
+    searchButton.classList.add('fa-2x')
+    searchButton.classList.remove('fa-1x')
+  }
+}
+
+const screenWidth = window.matchMedia("(max-width:400px)")
+mediaQuerie(screenWidth)
+screenWidth.addListener(mediaQuerie)
+
 export const Main = {
   renderPokemons,
   clearAllCards,

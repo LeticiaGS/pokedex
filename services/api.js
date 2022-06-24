@@ -1,5 +1,8 @@
 import { Main } from "../main.js"
 const url = `https://pokeapi.co/api/v2/`
+const backpackElement = document.getElementById('backpack')
+const bagPokemonElement = document.getElementById('bagPokemon')
+const input = document.querySelector('input')
 
 async function searchPokemon() {
   backpackElement.style.display = 'block'
