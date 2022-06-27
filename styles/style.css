@@ -213,6 +213,7 @@ section.pokemons .card-pokemon:hover img {
   top: -2.8rem;
   width: 20rem;
   height: 20rem;
+  z-index: 3;
 }
 .modal .bottom-info {
   background-color: #202020;
@@ -223,6 +224,7 @@ section.pokemons .card-pokemon:hover img {
   height: calc(50% + 1em);
   padding: 2rem 5rem;
   font-size: 1.6em;
+  z-index: 2;
 }
 .modal .bottom-info .options {
   display: flex;
