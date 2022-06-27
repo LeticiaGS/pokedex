@@ -57,7 +57,7 @@ function showFavoritePokemons() {
       'Ainda Não possui pokemons favoritados :(. Que tal adicionar alguns?'
     renderMessage(msg)
   } else {
-    pokemons.forEach(pokemon => renderPokemons(pokemon))
+    pokemons.forEach(pokemonID => API.getPokemonById(pokemonID))
   }
   backpackElement.style.display = 'none'
   bagPokemonElement.style.display = 'block'

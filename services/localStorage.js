@@ -6,21 +6,24 @@ function getFavoritePokemons() {
 
 function saveToLocalStorage(pokemon) {
   const pokemons = getFavoritePokemons() || []
-  pokemons.push(pokemon)
+  pokemons.push(pokemon.id)
 
   const pokemonsJSON = JSON.stringify(pokemons)
-  localStorage.setItem(localStorageKey, pokemonsJSON)
+  try {
+    localStorage.setItem(localStorageKey, pokemonsJSON)
+  } catch (error) {
+    console.log('Error in local storage', error)
+  }
 }
 
-function checkPokeminIsFavorited(id) {
+function checkPokeminIsFavorited(idInput) {
   const pokemons = getFavoritePokemons() || []
-  return pokemons.find(pokemon => pokemon.id == id)
+  return pokemons.find( id => id == idInput)
 }
 
-function removeFromLocalStorage(id) {
+function removeFromLocalStorage(idInput) {
   const pokemons = getFavoritePokemons() || []
-  const findPokemon = pokemons.find(pokemon => pokemon.id == id)
-  const newPokemons = pokemons.filter(pokemon => pokemon.id != findPokemon.id)
+  const newPokemons = pokemons.filter(id => id != idInput)
   localStorage.setItem(localStorageKey, JSON.stringify(newPokemons))
 }
 

@@ -33,6 +33,23 @@ async function searchPokemon() {
   }
 }
 
+async function getPokemonById(id) {
+  Main.clearAllCards()
+  const urlId = `${url}pokemon/${id}`
+    await fetch(urlId)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(response.statusText)
+        }
+        response.json().then(data => {
+          if (data != undefined) Main.renderPokemons(data)
+        })
+      })
+      .catch(e => {
+        console.log('catch:', e)
+      })
+}
+
 async function fetchPokemons() {
   const getPokemonUrl = id => `${url}pokemon/${id}`
 
@@ -59,5 +76,6 @@ async function getColorPokemon(id) {
 export const API = {
   searchPokemon,
   fetchPokemons,
-  getColorPokemon
+  getColorPokemon,
+  getPokemonById
 }
